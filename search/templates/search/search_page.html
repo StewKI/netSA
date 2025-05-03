@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'search/css/search_page.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form method="GET" action="" class="mb-4">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control form-control-lg"
+                               placeholder="Search for users..." aria-label="Search">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                {% if users %}
+                    <div class="list-group">
+                        {% for user in users %}
+                            <div class="list-group-item">
+                                <a href="{% url 'user:user_page' username=user.username %}"
+                                   class="text-decoration-none text-dark">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3">
+                                            {% if user.profile_picture %}
+                                                <img src="{{ user.profile_picture.url }}" alt="Profile picture"
+                                                     class="rounded-circle" width="50" height="50">
+                                            {% else %}
+                                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
+                                                     style="width: 50px; height: 50px;">
+                                                    {{ user.username|first|upper }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <h5 class="mb-1">{{ user.username }}</h5>
+                                            {% if user.name %}
+                                                <p class="mb-1 text-muted">{{ user.name }}</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {% if request.GET.q %}
+                        <p class="text-center">No users found matching your search.</p>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

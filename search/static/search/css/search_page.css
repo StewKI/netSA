@@ -1,0 +1,45 @@
+.input-group {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-control-lg {
+    border: 1px solid #ced4da;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.form-control-lg:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.btn-primary {
+    padding: 0.5rem 2rem;
+    font-weight: 500;
+}
+
+.list-group-item {
+    transition: all 0.2s ease-in-out;
+    border: 1px solid #e9ecef;
+    margin-bottom: 0.5rem;
+}
+
+.list-group-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.rounded-circle {
+    object-fit: cover;
+}
+
+.bg-secondary {
+    background-color: #6c757d !important;
+}
+
+.text-muted {
+    font-size: 0.9rem;
+}
+
+.mb-1 {
+    margin-bottom: 0.25rem !important;
+}

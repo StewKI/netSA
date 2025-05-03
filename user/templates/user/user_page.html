@@ -1,0 +1,67 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'user/css/user_page.css' %}">
+{% endblock %}
+
+
+{% block content %}
+        <h2>{{ user.username }}</h2>
+    {% if not is_page_of_logged_user %}
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="follow_form">
+            {% if is_following %}
+                <button type="submit">Unfollow</button>
+            {% else %}
+                <button type="submit">Follow</button>
+            {% endif %}
+        </form>
+    {% endif %}
+
+    <p>{{ user.description }}</p>
+        <div>
+            <h3>Posts:</h3>
+            {% if is_page_of_logged_user %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_type" value="post_form">
+                    <input type="text" name="content" placeholder="Write your post here">
+                    <button type="submit">Post</button>
+                </form>
+            {% endif %}
+
+            <div class="posts">
+                {% for post in user.posts.all %}
+                    <div class="post">
+                        <div class="post-header">
+                            <span class="post-author">{{ post.user.username }}</span>
+                            <span class="post-date">{{ post.created_at|date:"F j, Y, g:i a" }}</span>
+                        </div>
+                        <p class="post-content">{{ post.content }}</p>
+                        <div class="comments">
+                            <h4>Comments:</h4>
+                            <form method="POST" class="comment-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="form_type" value="comment_form">
+                                <input type="hidden" name="post_id" value="{{ post.id }}">
+                                <input type="text" name="comment_content" placeholder="Write a comment...">
+                                <button type="submit">Comment</button>
+                            </form>
+                            {% for comment in post.comments.all %}
+                                <div class="comment">
+                                    <div class="comment-header">
+                                        <span class="comment-author">{{ comment.user.username }}</span>
+                                        <span class="comment-date">{{ comment.created_at|date:"F j, Y, g:i a" }}</span>
+                                    </div>
+                                    <p class="comment-content">{{ comment.content }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+{% endblock %}

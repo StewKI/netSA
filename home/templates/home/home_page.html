@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'home/css/home_page.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% if posts %}
+        <div class="posts">
+            {% for post in posts %}
+                <div class="post">
+                    <div class="post-header">
+                        <span class="post-author">{{ post.user.username }}</span>
+                        <span class="post-date">{{ post.created_at|date:"F j, Y, g:i a" }}</span>
+                    </div>
+                    <p class="post-content">{{ post.content }}</p>
+                    <div class="comments">
+                        <h4>Comments:</h4>
+                        <form method="POST" action="{% url 'home:add_comment' post.id %}" class="comment-form">
+                            {% csrf_token %}
+                            <input type="text" name="content" placeholder="Write a comment...">
+                            <button type="submit">Comment</button>
+                        </form>
+                        {% for comment in post.comments.all %}
+                            <div class="comment">
+                                <div class="comment-header">
+                                    <span class="comment-author">{{ comment.user.username }}</span>
+                                    <span class="comment-date">{{ comment.created_at|date:"F j, Y, g:i a" }}</span>
+                                </div>
+                                <p class="comment-content">{{ comment.content }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <!--
+        {% for post in posts %}
+            <div class="post-container">
+                <div class="post-header">
+                    <a href="{% url 'user:user_page' post.user.username %}" class="user-link">
+                        <h3>{{ post.user.username }}</h3>
+                    </a>
+                    <small class="text-muted">{{ post.created_at|timesince }} ago</small>
+                </div>
+                <p>{{ post.content }}</p>
+
+                <div class="comments-section">
+                    <h4>Comments:</h4>
+                    {% for comment in post.comment_set.all %}
+                        <div class="comment">
+                            <a href="{% url 'user:user_page' comment.user.username %}">{{ comment.user.username }}</a>:
+                            {{ comment.content }}
+                            <small class="text-muted">{{ comment.created_at|timesince }} ago</small>
+                        </div>
+                    {% endfor %}
+
+                    <form method="post" action="{% url 'home:add_comment' post.id %}" class="comment-form">
+                        {% csrf_token %}
+                        <input type="text" name="content" placeholder="Add a comment..." required>
+                        <button type="submit">Comment</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+        -->
+    {% else %}
+        <p class="no-posts">Followers didn't post anything yet :\</p>
+    {% endif %}
+{% endblock %}
